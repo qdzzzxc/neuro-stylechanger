@@ -1,0 +1,12 @@
+bot/.idea/
+bot/__pycache__/
+bot/venv/
+bot/bot_log.log
+bot/config.ini
+bot/data.json
+
+neuro/.idea/
+neuro/__pycache__/
+neuro/venv/
+neuro/neuro_log.log
+neuro/test.py
