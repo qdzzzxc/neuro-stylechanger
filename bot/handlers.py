@@ -193,7 +193,7 @@ async def styletransfer_preset_callback_response(callback: CallbackQuery, dao, s
     media_group = MediaGroupBuilder()
 
     if not example_photos.get('styletransfer', False):
-        for pic in os.listdir(r'.\pictures\styletransfer'):
+        for pic in os.listdir(r'./pictures/styletransfer'):
             media_group.add_photo(FSInputFile(f'./pictures/styletransfer/{pic}'))
 
         photos_group = await callback.message.answer_media_group(media_group.build())

@@ -47,7 +47,7 @@ async def run():
         logging.info('конец обработки запроса')
         await nc.publish(reply, json_data.encode())
 
-    await nc.connect("nats://localhost:4222")
+    await nc.connect("nats://nats:4222")
     await nc.subscribe("example_subject", cb=message_handler)
     logging.info('Запуск NATS соединения')
 

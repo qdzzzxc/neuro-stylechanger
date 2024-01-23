@@ -27,7 +27,7 @@ async def main():
 
     logging.info('Подключение к NATS')
     nc = NATS()
-    await nc.connect("nats://localhost:4222")
+    await nc.connect("nats://nats:4222")
 
     dp = Dispatcher()
     dp.include_router(handlers.router)

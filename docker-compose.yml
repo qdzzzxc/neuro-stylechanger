@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  bot:
+    build:
+      context: ./bot
+    command: ["python", "__main__.py"]
+    restart: always
+    depends_on:
+      - nats
+    volumes:
+      - ./bot/data.json:/json/saved_data.json
+
+  neuro:
+    build:
+      context: ./neuro
+    command: ["python","main.py"]
+    restart: always
+    depends_on:
+      - nats
+
+  nats:
+    image: nats:latest
+    restart: always
+    ports:
+      - "4222:4222"
