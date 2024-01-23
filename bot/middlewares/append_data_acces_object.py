@@ -24,8 +24,7 @@ class JsonAndNatsMiddleware(BaseMiddleware):
 class DataAccess(object):
     def __init__(self, file_link):
         self.file_link = file_link
-        temp_dir = os.getcwd()
-        if not (os.path.exists(os.path.join(temp_dir, file_link))):
+        if not (os.path.exists(file_link)):
             self.data = {}
         else:
             with open(file_link, 'r') as json_file:

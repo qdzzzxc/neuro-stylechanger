@@ -25,7 +25,7 @@ async def main():
     bot = Bot(token=config.tg_token)
     await set_main_menu(bot)
 
-    logging.info('Подключение к NATS')
+    logging.info('connection to NATS')
     nc = NATS()
     await nc.connect("nats://nats:4222")
 
@@ -36,7 +36,7 @@ async def main():
     dp.update.middleware(SomeMiddleware())
     dp.update.middleware(JsonAndNatsMiddleware(link_for_json=config.json_path, nats=nc))
 
-    logging.info('Запуск бота')
+    logging.info('starting bot')
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

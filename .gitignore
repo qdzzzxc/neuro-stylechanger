@@ -2,8 +2,8 @@ bot/.idea/
 bot/__pycache__/
 bot/venv/
 bot/bot_log.log
-bot/config.ini
 bot/data.json
+bot/config.ini
 
 neuro/.idea/
 neuro/__pycache__/

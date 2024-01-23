@@ -8,8 +8,6 @@ services:
     restart: always
     depends_on:
       - nats
-    volumes:
-      - ./bot/data.json:/json/saved_data.json
 
   neuro:
     build:
