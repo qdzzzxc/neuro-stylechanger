@@ -48,7 +48,7 @@ class IsAlonePhoto(BaseFilter):
 
 
 @router.message(IsRegistered())
-async def welcome_message_response(message: Message, mode):
+async def welcome_message_response(message: Message):
     await message.reply(text=texts['registration'])
 
 
@@ -85,7 +85,17 @@ async def menu_instead_of_preset(message: Message, state: FSMContext):
 async def menu_command_response(message: Message, dao, mode):
     if mode == 'cpu':
         text = texts['menu_cyclegan']
-        await message.answer(text=text, reply_markup=choose_mode(dao[str(message.from_user.id)]['mode']), back=False)
+
+        if not example_photos.get('cyclegan', False):
+            photo = FSInputFile(f'./pictures/cyclegan/cyclegan_example.png')
+            photo_message = await message.answer_photo(photo=photo, caption=text,
+                                                       reply_markup=choose_mode(dao[str(message.from_user.id)]['mode'],
+                                                                                back=False))
+            example_photos['cyclegan'] = photo_message.photo[-1].file_id
+        else:
+            await message.answer_photo(photo=example_photos['cyclegan'], caption=text,
+                                       reply_markup=choose_mode(dao[str(message.from_user.id)]['mode'], back=False))
+
     else:
         await message.answer(text=texts['menu'], reply_markup=choose_algorithm())
 
@@ -231,9 +241,9 @@ async def chosen_button_pressed(callback: CallbackQuery):
 async def cyclegan_callback_response(callback: CallbackQuery, dao, state: FSMContext):
     text = texts['menu_cyclegan']
     await callback.message.edit_text(text=text, reply_markup=choose_mode(dao[str(callback.from_user.id)]['mode']))
-    photo = FSInputFile(f'./pictures/cyclegan/cyclegan_example.png')
 
     if not example_photos.get('cyclegan', False):
+        photo = FSInputFile(f'./pictures/cyclegan/cyclegan_example.png')
         photo_message = await callback.message.answer_photo(photo)
         example_photos['cyclegan'] = photo_message.photo[-1].file_id
     else:
@@ -244,12 +254,14 @@ async def cyclegan_callback_response(callback: CallbackQuery, dao, state: FSMCon
 
 
 @router.callback_query(F.data.in_({'Monet', 'VanGogh', 'Cezanne', 'Ukiyo-e', 'Serov'}))
-async def mode_button_pressed(callback: CallbackQuery, dao):
+async def mode_button_pressed(callback: CallbackQuery, dao, mode):
     dao[str(callback.from_user.id)]['mode'] = callback.data
     dao.save()
     text = f'CycleGan будет работать в режиме: {d[callback.data]}'
-    await callback.message.edit_text(text=text, reply_markup=choose_mode(callback.data))
-
+    if mode != 'cpu':
+        await callback.message.edit_text(text=text, reply_markup=choose_mode(callback.data))
+    else:
+        await callback.message.edit_caption(caption=text, reply_markup=choose_mode(callback.data, back=False))
 
 @router.message(IsAlonePhoto())
 async def alone_message_response(message: Message, nats, dao, state: FSMContext):
