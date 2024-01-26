@@ -25,9 +25,9 @@ async def main():
     bot = Bot(token=config.tg_token)
     await set_main_menu(bot)
 
-    logging.info('connection to NATS')
     nc = NATS()
-    await nc.connect("nats://nats:4222")
+    await nc.connect(f"nats://{config.nats.ip}:{config.nats.port}")
+    logging.info('connected to NATS')
 
     dp = Dispatcher()
     dp.include_router(handlers.router)

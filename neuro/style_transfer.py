@@ -110,7 +110,7 @@ class StyleTransfer(Singleton):
                            style_weight=1000000, content_weight=1):
         error = None
 
-        logging.info('Создание модели StyleTransfer')
+        logging.info('Style Transfer: creating a model')
         model, style_losses, content_losses = self.get_style_model_and_losses(style_img, content_img)
 
         # алгоритм изменяет входящую картинку, а не веса сети, поэтому
@@ -121,19 +121,20 @@ class StyleTransfer(Singleton):
 
         optimizer = self.get_input_optimizer(input_img)
 
-        logging.info('Начало оптимизации StyleTransfer')
+        logging.info('StyleTransfer: the beginning of optimization')
 
         start_time = time()
         temp_time = time()
         for step in range(num_steps):
             if step % 50 == 0:
-                logging.info(f'StyleTransfer: {step} шаг обработки')
+                logging.info(f'StyleTransfer: {step} processing step')
 
                 # 180 - nats timeout
                 if (time() - start_time) + (time() - temp_time) < 180:
                     temp_time = time()
                 else:
-                    logging.warning(f'StyleTransfer: картинки не успеют обработаться, преждевременно завершаю')
+                    logging.warning(
+                        f'StyleTransfer: the images will not have time to be processed, premature completion')
                     error = 'inner_timeout'
                     break
 
@@ -180,7 +181,7 @@ class StyleTransfer(Singleton):
         sizes = [*content_img.size, *style_img.size]
         min_size = min(sizes)
         if min_size > 500:
-            logging.warning('StyleTransfer: картинки слишком большие, уменьшаю размер')
+            logging.warning('StyleTransfer: the pictures are too big, the size is reduced')
             min_size = 500
 
         for i in range(len(images)):
@@ -210,12 +211,9 @@ class StyleTransfer(Singleton):
         return image
 
     def __call__(self, content_img, style_img, num_steps=100):
-        logging.info('StyleTransfer: начало обработки')
+        logging.info('StyleTransfer: start of processing')
 
         content_img, style_img = self.two_image_loader(content_img, style_img)
-
-        # style_img = self.image_loader(style_img)
-        # content_img = self.image_loader(content_img)
 
         assert style_img.size() == content_img.size(), \
             "we need to import style and content images of the same size"
@@ -227,5 +225,5 @@ class StyleTransfer(Singleton):
 
         output = self.to_pillow(output)
 
-        logging.info('StyleTransfer: конец обработки')
+        logging.info('StyleTransfer: end of processing')
         return output, error

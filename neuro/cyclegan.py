@@ -38,16 +38,16 @@ class CycleGan(Singleton):
 
         self.net.eval()
         self.mode = mode
-        logging.info(f'CycleGan: режим работы изменён на {self.mode}')
+        logging.info(f'CycleGan: the mode has been changed to {self.mode}')
 
     def __call__(self, image, mode):
-        logging.info('CycleGan: начало обработки')
+        logging.info('CycleGan: start of processing')
 
         if mode != self.mode:
-            logging.info('CycleGan: режим работы НЕ совпадает')
+            logging.info('CycleGan: the operating mode does NOT match')
             self.set_mode(mode)
         else:
-            logging.info('CycleGan: режим работы совпадает')
+            logging.info('CycleGan: the mode is the same')
 
         transform = transforms.Compose([
             transforms.ToTensor()])
@@ -59,7 +59,7 @@ class CycleGan(Singleton):
 
         img = Image.fromarray(self.tensor2im(result))
 
-        logging.info('CycleGan: конец обработки')
+        logging.info('CycleGan: end of processing')
         return img, None
 
     def tensor2im(self, input_image, imtype=np.uint8):

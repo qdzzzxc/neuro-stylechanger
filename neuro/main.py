@@ -1,4 +1,5 @@
 import logging
+import os
 from io import BytesIO
 
 from nats.aio.client import Client as NATS
@@ -6,20 +7,22 @@ import asyncio
 import base64
 import json
 from PIL import Image
-from torchvision.transforms import transforms
 
+from config import load_config, Config
 from style_transfer import StyleTransfer
 from cyclegan import CycleGan
 
 
 async def run():
     logging.basicConfig(level=logging.INFO, filename="neuro_log.log", filemode="w",
-                       format="%(asctime)s %(levelname)s %(message)s")
+                        format="%(asctime)s %(levelname)s %(message)s")
 
+    configfile = os.environ.get("CONFIG", "config.ini")
+    config: Config = load_config(configfile)
     nc = NATS()
 
     async def message_handler(msg):
-        logging.info('начало обработки запроса')
+        logging.info('start of request processing')
 
         reply = msg.reply
         data = json.loads(msg.data.decode())
@@ -44,17 +47,16 @@ async def run():
 
         json_data = json.dumps({"result": result, "error": error})
 
-        logging.info('конец обработки запроса')
+        logging.info('end of request processing')
         await nc.publish(reply, json_data.encode())
 
-    await nc.connect("nats://nats:4222")
-    await nc.subscribe("example_subject", cb=message_handler)
-    logging.info('Запуск NATS соединения')
+    await nc.connect(f"nats://{config.ip}:{config.port}")
+    await nc.subscribe("tg_bot", cb=message_handler)
+    logging.info('connected to NATS')
+
 
 def process_image(images, obj, **kwargs):
     result, error = obj(*images, **kwargs)
-
-    #result.save(f"saved_image_.jpg")
 
     return result, error
 

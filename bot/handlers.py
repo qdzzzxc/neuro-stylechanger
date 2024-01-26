@@ -20,7 +20,7 @@ storage = MemoryStorage()
 router = Router()
 
 d = {'Monet': 'стиль Клода Моне', 'VanGogh': 'стиль Винсента Ван Гога', 'Cezanne': 'стиль Поля Сезанна',
-     'Ukiyo-e': 'японский стиль Укиё-э',
+     'Ukiyo-e': 'японский стиль Укиё-э', 'Serov': 'стиль Валентина Серова',
      'femmes_dalger': 'Алжирские женщины', 'scream': 'Крик', 'starry_night': 'Звёздная ночь'}
 
 example_photos = {}
@@ -236,7 +236,7 @@ async def cyclegan_callback_response(callback: CallbackQuery, dao, state: FSMCon
     await state.update_data(picture_message=photo_message)
 
 
-@router.callback_query(F.data.in_({'Monet', 'VanGogh', 'Cezanne', 'Ukiyo-e'}))
+@router.callback_query(F.data.in_({'Monet', 'VanGogh', 'Cezanne', 'Ukiyo-e', 'Serov'}))
 async def mode_button_pressed(callback: CallbackQuery, dao):
     dao[str(callback.from_user.id)]['mode'] = callback.data
     dao.save()
