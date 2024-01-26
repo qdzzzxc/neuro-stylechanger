@@ -48,7 +48,7 @@ class IsAlonePhoto(BaseFilter):
 
 
 @router.message(IsRegistered())
-async def welcome_message_response(message: Message):
+async def welcome_message_response(message: Message, mode):
     await message.reply(text=texts['registration'])
 
 
@@ -66,8 +66,8 @@ async def dls_command_response(message: Message, nats, dao, state: FSMContext):
 
 
 @router.message(Command(commands=("start", "info")))
-async def info_command_response(message: Message):
-    await message.answer(text=texts['info'])
+async def info_command_response(message: Message, mode):
+    await message.answer(text=texts['info'][mode])
 
 
 @router.message(Command(commands=("contacts", "help")))
@@ -82,8 +82,12 @@ async def menu_instead_of_preset(message: Message, state: FSMContext):
 
 
 @router.message(Command(commands="menu"))
-async def menu_command_response(message: Message):
-    await message.answer(text=texts['menu'], reply_markup=choose_algorithm())
+async def menu_command_response(message: Message, dao, mode):
+    if mode == 'cpu':
+        text = texts['menu_cyclegan']
+        await message.answer(text=text, reply_markup=choose_mode(dao[str(message.from_user.id)]['mode']), back=False)
+    else:
+        await message.answer(text=texts['menu'], reply_markup=choose_algorithm())
 
 
 @router.message(UserStates.wait_for_response)
@@ -92,9 +96,12 @@ async def task_in_progress(message: Message):
 
 
 @router.message(Command(commands="preset"))
-async def menu_command_response(message: Message, dao, state: FSMContext):
-    await message.answer(text=texts['pic_for_preset'].format(d[dao[str(message.chat.id)]['preset']]))
-    await state.set_state(UserStates.preset_wait_for_picture)
+async def menu_command_response(message: Message, dao, mode, state: FSMContext):
+    if mode == 'cpu':
+        await message.answer(text=texts['cpu_mode_preset'])
+    else:
+        await message.answer(text=texts['pic_for_preset'].format(d[dao[str(message.chat.id)]['preset']]))
+        await state.set_state(UserStates.preset_wait_for_picture)
 
 
 @router.message(IsAlonePhoto(), UserStates.preset_wait_for_picture)

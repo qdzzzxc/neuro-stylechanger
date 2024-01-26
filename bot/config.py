@@ -14,6 +14,7 @@ class Config:
     json_path: str
     logging_path: str
     nats: NatsConfig
+    mode: str
 
 
 def load_config(path: str | None = None) -> Config:
@@ -26,5 +27,6 @@ def load_config(path: str | None = None) -> Config:
                   nats=NatsConfig(ip=config.get("nats", "ip"),
                                   port=config.get("nats", "port")
 
-                                  )
+                                  ),
+                  mode=config.get("tg_bot", "mode")
                   )

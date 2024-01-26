@@ -35,6 +35,7 @@ async def run():
         if data['model'] == 'CycleGan':
             obj = CycleGan()
             result, error = process_image(images_data, obj, mode=data["mode"])
+            del obj
         elif data['model'] == 'StyleTransfer':
             obj = StyleTransfer()
             result, error = process_image(images_data, obj, num_steps=data["steps"])
@@ -51,7 +52,7 @@ async def run():
         await nc.publish(reply, json_data.encode())
 
     await nc.connect(f"nats://{config.ip}:{config.port}")
-    await nc.subscribe("tg_bot", cb=message_handler)
+    await nc.subscribe("neuro", cb=message_handler)
     logging.info('connected to NATS')
 
 

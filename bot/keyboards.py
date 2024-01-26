@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 d = {50: 0, 100: 1, 200: 2, 400: 3,
-     'Monet': 0, 'VanGogh': 1, 'Cezanne': 2, 'Ukiyo-e': 3,
+     'Monet': 0, 'VanGogh': 1, 'Cezanne': 2, 'Ukiyo-e': 3, 'Serov': 4,
      'femmes_dalger': 0, 'scream': 1, 'starry_night': 2}
 
 
@@ -49,13 +49,15 @@ def choose_preset_picture(chosen):
     return kb_builder.as_markup(resize_keyboard=True)
 
 
-def choose_mode(chosen):
+def choose_mode(chosen, back=True):
     kb_builder = InlineKeyboardBuilder()
     button_names = ['Клод Моне', 'Винсент Ван Гог', 'Поль Сезанн', 'стиль Укиё-э', 'Валентин Серов (в разработке!)']
     back_data = ['Monet', 'VanGogh', 'Cezanne', 'Ukiyo-e', 'Serov']
     button_names[d[chosen]] += ' ✅'
     back_data[d[chosen]] = 'chosen'
     buttons = [InlineKeyboardButton(text=text, callback_data=data) for text, data in zip(button_names, back_data)]
-    buttons.append(InlineKeyboardButton(text='Назад', callback_data='menu'))
-    kb_builder.row(*buttons, width=2)
+    if back:
+        buttons.append(InlineKeyboardButton(text='Назад', callback_data='menu'))
+    kb_builder.add(*buttons)
+    kb_builder.adjust(2, 2, 1, 1)
     return kb_builder.as_markup(resize_keyboard=True)

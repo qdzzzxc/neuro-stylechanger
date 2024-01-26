@@ -5,10 +5,11 @@ from aiogram import BaseMiddleware
 
 
 class JsonAndNatsMiddleware(BaseMiddleware):
-    def __init__(self, link_for_json, nats):
+    def __init__(self, link_for_json, nats, mode):
         super().__init__()
         self.dao = DataAccess(link_for_json)
         self.nats = nats
+        self.mode = mode
 
     async def __call__(
             self,
@@ -18,6 +19,7 @@ class JsonAndNatsMiddleware(BaseMiddleware):
     ):
         data["dao"] = self.dao
         data["nats"] = self.nats
+        data["mode"] = self.mode
         return await handler(event, data)
 
 

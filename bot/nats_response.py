@@ -12,7 +12,7 @@ async def request_to_neuro(images, model, connection, mode="Monet", steps=50):
     json_data = json.dumps({"images": images_data, "model": model, "mode": mode, "steps": steps})
 
     try:
-        response = await connection.request("example_subject", json_data.encode(), timeout=200)
+        response = await connection.request("neuro", json_data.encode(), timeout=620)
 
         data = json.loads(response.data.decode())
 

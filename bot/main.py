@@ -23,7 +23,7 @@ async def main():
                        format="%(asctime)s %(levelname)s %(message)s")
 
     bot = Bot(token=config.tg_token)
-    await set_main_menu(bot)
+    await set_main_menu(bot, mode=config.mode)
 
     nc = NATS()
     await nc.connect(f"nats://{config.nats.ip}:{config.nats.port}")
@@ -34,7 +34,7 @@ async def main():
 
     dp.message.outer_middleware(ThrottlingMiddleware())
     dp.update.middleware(SomeMiddleware())
-    dp.update.middleware(JsonAndNatsMiddleware(link_for_json=config.json_path, nats=nc))
+    dp.update.middleware(JsonAndNatsMiddleware(link_for_json=config.json_path, nats=nc, mode=config.mode))
 
     logging.info('starting bot')
 

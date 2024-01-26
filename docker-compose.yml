@@ -22,3 +22,6 @@ services:
     restart: always
     ports:
       - "4222:4222"
+    volumes:
+      - ./nats-server.conf:/nats-server.conf
+    command: "--config /nats-server.conf"
