@@ -23,4 +23,8 @@ async def request_to_neuro(images, model, connection, mode="Monet", steps=50):
     except asyncio.TimeoutError:
 
         logging.error(f'TimeoutError in nats request')
-        return
+        return None, 'timeout'
+
+    except Exception as error:
+        logging.error(f'{error} in nats request')
+        return None, 'idk_error'

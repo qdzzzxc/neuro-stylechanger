@@ -138,15 +138,12 @@ async def menu_instead_of_preset(message: Message, nats, dao, state: FSMContext)
         pillow_image = BufferedInputFile(res, filename="pillow_image.png")
 
         await temp_message.edit_text(text=texts['success'])
-
         await message.answer_photo(pillow_image)
-
-        if error:
-            await message.answer(text=texts[error])
-
-    # nats timeout error
     else:
-        await temp_message.edit_text(text=texts['error'])
+        await temp_message.delete()
+
+    if error:
+        await message.answer(text=texts[error])
 
     await state.clear()
 
@@ -263,6 +260,7 @@ async def mode_button_pressed(callback: CallbackQuery, dao, mode):
     else:
         await callback.message.edit_caption(caption=text, reply_markup=choose_mode(callback.data, back=False))
 
+
 @router.message(IsAlonePhoto())
 async def alone_message_response(message: Message, nats, dao, state: FSMContext):
     image = BytesIO()
@@ -279,10 +277,12 @@ async def alone_message_response(message: Message, nats, dao, state: FSMContext)
         pillow_image = BufferedInputFile(res, filename="pillow_image.png")
 
         await temp_message.edit_text(text=texts['success'])
-
         await message.answer_photo(pillow_image)
     else:
-        await temp_message.edit_text(text=texts['error'])
+        await temp_message.delete()
+
+    if error:
+        await message.answer(text=texts[error])
 
     await state.clear()
 
@@ -311,15 +311,12 @@ async def photos_after_mw(message: Message, dao, nats, album, state: FSMContext)
         pillow_image = BufferedInputFile(res, filename="pillow_image.png")
 
         await temp_message.edit_text(text=texts['success'])
-
         await message.answer_photo(pillow_image)
-
-        if error:
-            await message.answer(text=texts[error])
-
-    # nats timeout error
     else:
-        await temp_message.edit_text(text=texts['error'])
+        await temp_message.delete()
+
+    if error:
+        await message.answer(text=texts[error])
 
     await state.clear()
 

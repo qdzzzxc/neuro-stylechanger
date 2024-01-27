@@ -34,8 +34,11 @@ async def run():
 
         if data['model'] == 'CycleGan':
             obj = CycleGan()
-            result, error = process_image(images_data, obj, mode=data["mode"])
-            del obj
+            try:
+                result, error = process_image(images_data, obj, mode=data["mode"])
+            except Exception as r:
+                logging.error(f'In CycleGAN happened {r}')
+                result, error = None, 'idk_error'
         elif data['model'] == 'StyleTransfer':
             obj = StyleTransfer()
             result, error = process_image(images_data, obj, num_steps=data["steps"])

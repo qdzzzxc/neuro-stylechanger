@@ -41,6 +41,7 @@ class CycleGan(Singleton):
         logging.info(f'CycleGan: the mode has been changed to {self.mode}')
 
     def __call__(self, image, mode):
+        error = None
         logging.info('CycleGan: start of processing')
 
         if mode != self.mode:
@@ -48,6 +49,16 @@ class CycleGan(Singleton):
             self.set_mode(mode)
         else:
             logging.info('CycleGan: the mode is the same')
+
+        w, h = image.size
+        if max(w, h) > 1920:
+            if w >= h:
+                image = image.resize((1920, round(1920 * h / w)))
+            else:
+                image = image.resize((round(1920 * w / h), 1920))
+
+            error = 'too_big'
+            logging.warning(f'CycleGan: pic are too big: ({w}, {h}) -> ({image.size[0]}, {image.size[1]})')
 
         transform = transforms.Compose([
             transforms.ToTensor()])
@@ -60,7 +71,7 @@ class CycleGan(Singleton):
         img = Image.fromarray(self.tensor2im(result))
 
         logging.info('CycleGan: end of processing')
-        return img, None
+        return img, error
 
     def tensor2im(self, input_image, imtype=np.uint8):
         """"Представляем тензор в виде, удобном для pillow.

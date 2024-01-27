@@ -12,8 +12,6 @@ from nats.aio.client import Client as NATS
 from config import load_config, Config
 from middlewares.throttling import ThrottlingMiddleware
 
-# nats-server --config Z:/python_project/dls_project/bot/nats-server.conf
-
 
 async def main():
     configfile = os.environ.get("CONFIG", "config.ini")
