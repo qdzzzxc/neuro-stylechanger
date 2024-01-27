@@ -14,7 +14,7 @@ from cyclegan import CycleGan
 
 
 async def run():
-    logging.basicConfig(level=logging.INFO, filename="neuro_log.log", filemode="w",
+    logging.basicConfig(level=logging.INFO, filename="neuro_log.log", filemode="a",
                         format="%(asctime)s %(levelname)s %(message)s")
 
     configfile = os.environ.get("CONFIG", "config.ini")
