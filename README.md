@@ -18,6 +18,7 @@
 1) Клонируйте данный репозиторий
 ```bash
 git clone https://github.com/qdzzzxc/neuro-stylechanger
+```
 
 2) Перейдите в директорию проекта и задайте все необходые параметры в файлах config.ini в папках bot и neuro.
 В каждой папке имеется файл config.example.ini, содержащий информацию о том, как должен выглядить конфигурационный файл.
@@ -28,7 +29,9 @@ git clone https://github.com/qdzzzxc/neuro-stylechanger
 Саму сборку контейнеров можно запустить через команду
 ```bash
 docker-compose build
+```
 
 Затем необходимо запустить созданные контейнеры через команду
 ```bash
 docker-compose up
+```
