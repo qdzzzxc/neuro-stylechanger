@@ -7,7 +7,6 @@
 Пример работы бота:
 
 ![image](https://github.com/qdzzzxc/neuro-stylechanger/assets/126320160/42ad9b16-1d9c-4b71-9919-6c4903c0b04c)
-
 ![image](https://github.com/qdzzzxc/neuro-stylechanger/assets/126320160/96954b46-4ec8-4474-b012-4dbb8015f032)
 
 
