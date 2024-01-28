@@ -9,9 +9,6 @@
 ![s1](https://github.com/qdzzzxc/neuro-stylechanger/assets/126320160/41b332a6-3ab5-4460-9c3d-4a178be0829c)
 ![s2](https://github.com/qdzzzxc/neuro-stylechanger/assets/126320160/52fef69c-7d71-4962-af39-5359d4ef27b5)
 
-
-
-
 ### Установка
 ---
 
@@ -38,3 +35,10 @@ docker-compose build
 ```bash
 docker-compose up
 ```
+## Структура проекта
+
+### Телеграм бот
+
+Бот написан с помощью фреймворка aiogram 3. Весь код, связанный с работой бота расположен в папке bot. 
+Для хранения данных испольется json-файл, но паттерн data acces object, региструющий объект соединения через middleware,
+позволяет легко заменить json формат на любой другой, например СУБД postgree или иную. 
