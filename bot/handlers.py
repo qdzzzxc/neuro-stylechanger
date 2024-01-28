@@ -108,7 +108,7 @@ async def task_in_progress(message: Message):
 @router.message(Command(commands="preset"))
 async def menu_command_response(message: Message, dao, mode, state: FSMContext):
     if mode == 'cpu':
-        await message.answer(text=texts['cpu_mode_preset'])
+        await message.answer(text=texts['cpu_mode'])
     else:
         await message.answer(text=texts['pic_for_preset'].format(d[dao[str(message.chat.id)]['preset']]))
         await state.set_state(UserStates.preset_wait_for_picture)
@@ -288,7 +288,10 @@ async def alone_message_response(message: Message, nats, dao, state: FSMContext)
 
 
 @router.message(F.photo)
-async def photos_after_mw(message: Message, dao, nats, album, state: FSMContext):
+async def photos_after_mw(message: Message, dao, nats, album, state: FSMContext, mode):
+    if mode == 'cpu':
+        return await message.answer(text=texts['cpu_mode'])
+
     q = (len(album))
     if q != 2:
         return await message.reply(text=texts['only two pics'])

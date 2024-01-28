@@ -130,7 +130,7 @@ class StyleTransfer(Singleton):
                 logging.info(f'StyleTransfer: {step} processing step')
 
                 # 180 - nats timeout
-                if (time() - start_time) + (time() - temp_time) < 600:
+                if (time() - start_time) + (time() - temp_time) < 180:
                     temp_time = time()
                 else:
                     logging.warning(
