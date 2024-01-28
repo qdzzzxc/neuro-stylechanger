@@ -13,15 +13,11 @@ from style_transfer import StyleTransfer
 from cyclegan import CycleGan
 
 
-async def run():
-    logging.basicConfig(level=logging.INFO, filename="neuro_log.log", filemode="a",
-                        format="%(asctime)s %(levelname)s %(message)s")
+class RequestHandler:
+    def __init__(self, nats):
+        self.nc = nats
 
-    configfile = os.environ.get("CONFIG", "config.ini")
-    config: Config = load_config(configfile)
-    nc = NATS()
-
-    async def message_handler(msg):
+    async def handle_request(self, msg):
         logging.info('start of request processing')
 
         reply = msg.reply
@@ -52,7 +48,21 @@ async def run():
         json_data = json.dumps({"result": result, "error": error})
 
         logging.info('end of request processing')
-        await nc.publish(reply, json_data.encode())
+        await self.nc.publish(reply, json_data.encode())
+
+
+async def run():
+    logging.basicConfig(level=logging.INFO, filename="neuro_log.log", filemode="a",
+                        format="%(asctime)s %(levelname)s %(message)s")
+
+    configfile = os.environ.get("CONFIG", "config.ini")
+    config: Config = load_config(configfile)
+    nc = NATS()
+
+    request_handler = RequestHandler(nc)
+
+    async def message_handler(msg):
+        await request_handler.handle_request(msg)
 
     await nc.connect(f"nats://{config.ip}:{config.port}")
     await nc.subscribe("neuro", cb=message_handler)

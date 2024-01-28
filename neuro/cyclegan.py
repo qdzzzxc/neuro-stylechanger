@@ -51,11 +51,14 @@ class CycleGan(Singleton):
             logging.info('CycleGan: the mode is the same')
 
         w, h = image.size
-        if max(w, h) > 1920:
+        logging.warning(f'({w}, {h})')
+
+        maxsize = 920
+        if max(w, h) > maxsize:
             if w >= h:
-                image = image.resize((1920, round(1920 * h / w)))
+                image = image.resize((maxsize, round(maxsize * h / w)))
             else:
-                image = image.resize((round(1920 * w / h), 1920))
+                image = image.resize((round(maxsize * w / h), maxsize))
 
             error = 'too_big'
             logging.warning(f'CycleGan: pic are too big: ({w}, {h}) -> ({image.size[0]}, {image.size[1]})')
