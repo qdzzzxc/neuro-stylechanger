@@ -13,6 +13,6 @@ neuro/test.py
 neuro/config.ini
 neuro/im.jpg
 
-jupyter
+.gitattributes
 
 README.md
