@@ -51,7 +51,7 @@ def choose_preset_picture(chosen):
 
 def choose_mode(chosen, back=True):
     kb_builder = InlineKeyboardBuilder()
-    button_names = ['Клод Моне', 'Винсент Ван Гог', 'Поль Сезанн', 'стиль Укиё-э', 'Валентин Серов (в разработке!)']
+    button_names = ['Клод Моне', 'Винсент Ван Гог', 'Поль Сезанн', 'стиль Укиё-э', 'Валентин Серов']
     back_data = ['Monet', 'VanGogh', 'Cezanne', 'Ukiyo-e', 'Serov']
     button_names[d[chosen]] += ' ✅'
     back_data[d[chosen]] = 'chosen'
